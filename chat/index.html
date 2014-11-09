@@ -1,0 +1,30 @@
+<!doctype html>
+<head>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+	<p>hallo </p>
+	<p id="status">status</p>
+	<p id="chat_list"></p>
+	<form id="chat_form">
+		<input id="chat_input" type="text"/>
+		<input type="submit" val="ok">
+	</form>
+	<script>
+		var socket = io.connect('http://localhost:8080');
+		$('#chat_form').submit( function(e) {
+			var msg = $('#chat_input').val();
+			socket.emit('message', msg);
+		});
+		socket.on('message', function(data) {
+			console.log('msg:' + data);
+			$("#chat_list").html(data);
+		});
+		socket.on('connect', function(data) {
+			$("#status").html('connected to server');
+			nickname = prompt('you name');
+			socket.emit('join', nickname);
+		});
+	</script>
+</body>
