@@ -9,6 +9,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "redis": "^0.12.1"
+    "express": "3.x",
+    "redis": "^0.12.1",
+    "jade": "~1.6.0"
   }
 }
