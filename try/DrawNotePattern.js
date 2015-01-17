@@ -1,6 +1,6 @@
 
-var DrawNotePattern = function(canvas) {
-	this.canvas = canvas;
+var DrawNotePattern = function(can) {
+	var canvas = can;
 
 
 	var getColor = function(colNr) {
@@ -35,7 +35,6 @@ var DrawNotePattern = function(canvas) {
 			}
 			maxEnd = Math.max(maxEnd, note.start + note.length);
 		});
-		console.log(aBlocks);
 		return aBlocks;
 	};
 
@@ -75,13 +74,13 @@ var DrawNotePattern = function(canvas) {
 			oPattern.notes.push(oNote);
 		});
 		return oPattern;
-	}
+	};
 
 	return  {
-		draw = function(text) {
+		draw: function(text) {
 			var oPattern = parsePattern(text);
-			drawAll(oPattern);
+			drawAll(canvas, oPattern);
 		}
-	}
-	
+	};
 };
+
