@@ -55,7 +55,7 @@ var DrawNotePattern = function(can) {
 			    context.fillStyle = note.color;
 			    var x = note.start;
 			    var len = note.length;
-			    context.fillRect(x*10, height*idx, len*10, height);
+			    context.fillRect(x, height*idx, len, height);
 			    idx++;
 	    	} );
 	    });
