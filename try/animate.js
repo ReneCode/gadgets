@@ -22,34 +22,96 @@ var Item = function() {
   this.borderColor = "black";
   this.flash = {
     pattern: "100",
-    current: 0
+    lastTime: 0
   };
+  this.move = {
+    sumElapsedTime: 0,
+    vector: {x:0, y:0}
+  };
+
+  this.lastAnimationTime = (new Date()).getTime();
 };
 
+Item.prototype.startMove = function(targetX, targetY) {
+  var dx = targetX - this.x;
+  var dy = targetY - this.y;
+  var len = Math.sqrt(dx*dx + dy*dy);
+  this.move.vector.x = dx / len;
+  this.move.vector.y = dy / len;
+};
 
-Item.prototype.updateMove = function(startTime, canvas) {
-  // update
-  var time = (new Date()).getTime() - startTime;
+Item.prototype.updateMove = function(elapsedTime, canvas) {
+  this.move.sumElapsedTime += elapsedTime;
 
-  var linearSpeed = 40;
+  var linearSpeed = 30;
+  
+  linearSpeed = (linearSpeed * this.move.sumElapsedTime) / 1000;
   // pixels / second
-  var newX = linearSpeed * time / 1000;
+  var newX = linearSpeed * this.move.vector.x;
+  var newY = linearSpeed * this.move.vector.y;
 
-  console.log("NewX: " + newX);
+  if (newX < canvas.width  &&  newY < canvas.height) {
+    this.x = newX;
+    this.y = newY;
+  }
+
+  return true;
+  
+  var newX = Math.round(linearSpeed * this.move.sumElapsedTime / 1000);
+//  var newX = linearSpeed * this.move.sumElapsedTime / 1000;
+  if (this.x == newX) {
+    return false;
+  }
 
   if(newX < canvas.width - this.width - this.borderWidth / 2) {
     this.x = newX;
+    return true;
   }
+  else {
+    return false;
+  }
+  
 };
 
-Item.prototype.updateFlash = function() {
+
+
+Item.prototype.updateFlash = function(elapsedTime) {
+  var interval = 1000;
+
+  this.flash.lastTime += elapsedTime;
+  if (this.flash.lastTime < interval) {
+    return false;
+  }
+  this.flash.lastTime -= interval;
   if (this.fillColor == 'blue') {
     this.fillColor = 'red';
   }
   else {
     this.fillColor = 'blue';
   }
+  return true;
 };
+
+
+Item.prototype.getElapsedTime = function() {
+
+  var currentTime = (new Date()).getTime();
+  var elapsedTime = currentTime - this.lastAnimationTime;
+  this.lastAnimationTime = currentTime;
+  return elapsedTime;
+};
+
+Item.prototype.updateAnimation = function(startTime, canvas) {
+  
+  var elapsedTime = this.getElapsedTime();
+
+  var bMove = this.updateMove(elapsedTime, canvas);
+  var bFlash = this.updateFlash(elapsedTime);
+  // return true, if anything is changed
+  return bMove || bFlash;
+}
+
+
 
 Item.prototype.draw = function(context) {
   context.beginPath();
@@ -63,36 +125,16 @@ Item.prototype.draw = function(context) {
 
 
 var myRectangle = new Item();
+myRectangle.startMove(300, 300);
 
 function animate(myRectangle, canvas, context, startTime) {
+  if (myRectangle.updateAnimation(startTime, canvas)) {
+    // redraw
+    // clear
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    myRectangle.draw(context);
 
-
-  /*
-  // update
-  var time = (new Date()).getTime() - startTime;
-
-  var linearSpeed = 40;
-  // pixels / second
-  var newX = linearSpeed * time / 1000;
-
-  console.log("NewX: " + newX);
-
-  if(newX < canvas.width - myRectangle.width - myRectangle.borderWidth / 2) {
-    myRectangle.x = newX;
   }
-  else
-  {
-    return;
-  }
-*/
-
-  myRectangle.updateMove(startTime, canvas);
-
-  // clear
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-
-  myRectangle.draw(context);
 
   // request new frame
   requestAnimFrame(function() {
@@ -112,23 +154,4 @@ setTimeout(function() {
   animate(myRectangle, canvas, context, startTime);
 }, 1000);
 
-
-var flashInterval = setInterval( function() {
-  myRectangle.updateFlash();
-/*
-  if (myRectangle.fillColor == 'blue') {
-    myRectangle.fillColor = 'red';
-  }
-  else {
-    myRectangle.fillColor = 'blue';
-  }
-  
-  var newSize = myRectangle.width+3;
-  if (newSize > 70) {
-    newSize = 40;
-  }
-  myRectangle.height = newSize;
-  myRectangle.width = newSize;
-  */
-}, 500);
 
