@@ -2,6 +2,15 @@
 var DrawNotePattern = function(can) {
 	var canvas = can;
 
+	// var patternLength = 4; 		// second
+	// var bpm = 120;				// bpm
+	// var minNote = 32;			// 1/32 note
+	// var minNoteLengthMs = undefined; // in ms
+	// var minNoteLengthPixel = undefined;
+
+	// minNoteLength = 60 * 1000 * 4 / (bpm * minNote);
+
+
 
 	var getColor = function(colNr) {
 		switch (colNr) {
@@ -42,6 +51,12 @@ var DrawNotePattern = function(can) {
 	    var context = canvas.getContext('2d');
 	    var maxHeight = canvas.height;
 
+	    //120 bpm
+	    // min note 1/32
+	    // 4 second length
+	    // => 64 * 1/32 note in 4 sec
+	    var minNoteWidth = canvas.width / 64;
+
 	    // clear
 	    context.fillStyle = '#eeeeee';
 	    context.fillRect(0, 0, canvas.width, canvas.height);
@@ -55,7 +70,7 @@ var DrawNotePattern = function(can) {
 			    context.fillStyle = note.color;
 			    var x = note.start;
 			    var len = note.length;
-			    context.fillRect(x, height*idx, len, height);
+			    context.fillRect(x*minNoteWidth, height*idx, len*minNoteWidth, height);
 			    idx++;
 	    	} );
 	    });

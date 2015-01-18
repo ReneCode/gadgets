@@ -14,7 +14,10 @@ var drawcomposing = function() {
 
 
 var cntXField = 4;
-var cntYField = 1;
+var cntYField = 2;
+
+
+
 
 function componentToHex(c) {
     var hex = c.toString(16);
@@ -51,7 +54,12 @@ var enterPatternTimeout = undefined;
 var aEnterNotes = [];
 var startEnterTime = undefined;
 
-
+// 120 bpm
+// 1/32 = min note
+// =>  1/4 note = 0.5 sec / 500 ms
+//     1/8 note = 500 ms / 2 = 250 ms
+//     1/32 note = 500 ms / 8 = 62.5 ms
+var timeQuant = 62.5;
 
 
 
@@ -82,7 +90,7 @@ var doMouseDown = function(event) {
 	event.preventDefault();
 
 	var noteStart = getTimeNow() - startEnterTime;
-	noteStart = Math.floor(noteStart / 10);
+	noteStart = Math.floor(noteStart / timeQuant);
 
 	var note = [1,noteStart,1];
 	aEnterNotes.push(note);
