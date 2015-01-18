@@ -41,10 +41,11 @@ var EnterNoteComposition = function(can) {
 		var xSize = canvas.width / cntXField;
 		var ySize = canvas.height / cntYField;
 
-		var x = 0
+		var colNumber = 1;
 		for (var x=0; x<cntXField; x++) {
 			for (var y=0; y<cntYField; y++) {
-				context.fillStyle = rgbToHex(x*50, y*80, 255-x*50);
+				context.fillStyle = getColorFromNumber(1+ x + y*cntXField);
+				colNumber++;
 				context.fillRect(x*xSize, y*ySize, xSize, ySize);
 			}
 		}
@@ -54,7 +55,13 @@ var EnterNoteComposition = function(can) {
 
 
 	var getNoteValueFromTapPoint = function(pt) {
-		return 1;
+		var xSize = canvas.width / cntXField;
+		var ySize = canvas.height / cntYField;
+
+		var xTile = Math.floor(pt.x / xSize);
+		var yTile = Math.floor(pt.y / ySize);
+		var noteValue = 1 + (cntXField * yTile + xTile);
+		return noteValue;
 	}
 
 	var finishEnterPattern = function() {
@@ -83,8 +90,8 @@ var EnterNoteComposition = function(can) {
 		var rect = canvas.getBoundingClientRect();
 		if (event.type == 'mousedown'  ||  event.type == 'mousemove') {
 			return {
-				x: parseInt( (evt.clientX - rect.left) * 1000 / rect.width),
-				y: parseInt( (evt.clientY - rect.top) * 1000 / rect.height)
+				x: parseInt(evt.clientX - rect.left),
+				y: parseInt(evt.clientY - rect.top)
 			};
 		}
 		else {
@@ -94,8 +101,8 @@ var EnterNoteComposition = function(can) {
 				return null; 
 			}
 			return {
-				x: parseInt( (evt.targetTouches[0].clientX - rect.left) * 1000 / rect.width),
-				y: parseInt( (evt.targetTouches[0].clientY - rect.top) * 1000 / rect.height)
+				x: parseInt(evt.targetTouches[0].clientX - rect.left),
+				y: parseInt(evt.targetTouches[0].clientY - rect.top)
 			};
 		}
 	}
@@ -109,7 +116,7 @@ var EnterNoteComposition = function(can) {
 		var pt = getMousePosition(canvas, event);
 		var noteValue = getNoteValueFromTapPoint(pt);
 
-		var note = [1,noteStart,1];
+		var note = [noteValue,noteStart,1];
 		aEnterNotes.push(note);
 	}
 

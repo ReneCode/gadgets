@@ -12,16 +12,7 @@ var DrawNotePattern = function(can) {
 
 
 
-	var getColor = function(colNr) {
-		switch (colNr) {
-			case 1: return 'red';
-			case 2: return 'blue';
-			case 3: return 'yellow';
-			case 4: return 'brown';
-			case 5: return '#00ff00';
-			default: return 'white';
-		}
-	};
+
 
 
 	var makeBlocks = function(oPattern) {
@@ -83,7 +74,7 @@ var DrawNotePattern = function(can) {
 
 		var oPattern = { notes:[] };
 		aPattern.forEach( function(tone) {
-			var oNote = {color: getColor(tone[0]), 
+			var oNote = {color: getColorFromNumber(tone[0]), 
 						 start: tone[1],
 						 length: tone[2]};
 			oPattern.notes.push(oNote);
