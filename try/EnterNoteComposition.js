@@ -12,11 +12,15 @@ var EnterNoteComposition = function(can) {
 	var aEnterNotes = [];
 	var startEnterTime = undefined;
 
+	var lastMouseDownTime = undefined;
+	var lastNoteValue = undefined;
+
 	// 120 bpm
 	// 1/32 = min note
 	// =>  1/4 note = 0.5 sec / 500 ms
 	//     1/8 note = 500 ms / 2 = 250 ms
 	//     1/32 note = 500 ms / 8 = 62.5 ms
+	//var timeQuant = 62.5;
 	var timeQuant = 62.5;
 
 
@@ -110,7 +114,12 @@ var EnterNoteComposition = function(can) {
 	var doMouseDown = function(event) {
 		event.preventDefault();
 
-		var noteStart = getTimeNow() - startEnterTime;
+		lastMouseDownTime = getTimeNow();
+
+		var pt = getMousePosition(canvas, event);
+		lastNoteValue = getNoteValueFromTapPoint(pt);
+
+/*		var noteStart = getTimeNow() - startEnterTime;
 		noteStart = Math.floor(noteStart / timeQuant);
 
 		var pt = getMousePosition(canvas, event);
@@ -118,20 +127,34 @@ var EnterNoteComposition = function(can) {
 
 		var note = [noteValue,noteStart,1];
 		aEnterNotes.push(note);
+		*/
 	}
 
+	var doMouseUp = function(event) {
+		event.preventDefault();
 
+		var noteLength = getTimeNow() - lastMouseDownTime;
+		noteLength = Math.floor(noteLength / timeQuant);
+		// minimal 1 length
+		noteLength = Math.max(noteLength, 1);
+
+		var noteStart = lastMouseDownTime - startEnterTime;
+		noteStart = Math.floor(noteStart / timeQuant);
+
+		var note = [lastNoteValue,noteStart,noteLength];
+		aEnterNotes.push(note);
+	}
 
 
 	var enterPattern = function() {
 		enterPatternTimeout = setTimeout(finishEnterPattern, 4*1000);
 
 		canvas.addEventListener('touchstart', doMouseDown, false);
-		// canvas.addEventListener('touchend', doMouseUp, false);
+		canvas.addEventListener('touchend', doMouseUp, false);
 		// canvas.addEventListener('touchmove', doMouseMove, false);
 
 		canvas.addEventListener('mousedown', doMouseDown, false);
-		// canvas.addEventListener('mouseup', doMouseUp, false);
+		canvas.addEventListener('mouseup', doMouseUp, false);
 		// canvas.addEventListener('mousemove', doMouseMove, false);
 
 		startEnterTime = getTimeNow();
