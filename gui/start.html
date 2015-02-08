@@ -14,20 +14,17 @@
 	<body>
 		<div data-role="page">
 			<div data-role="header">
+				<a href="sign-in.html" data-rel="back" class="ui-btn-left ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back">Back</a>
 				<h1>Pingiumus</h1>
 			</div>
 
 			<div data-role="content">
-				<div role="main" data-role="ui-content">
-					<h2>Login</h2>
-					<div data-role="controlgroup">
-						<form action="start.html">
-							<input type="text" id="username" name="user" id="txtusername" data-theme="c" value="" placeholder="user name">
-							<p>
-							<button data-theme="b" >Login</button>
-						</form>
-					</div>
+				<div data-role="ui-content" >
+					<h3 id="groupheader">Groups</h3>
+					<a href="groupadd.html" class="ui-btn-right ui-btn ui-corner-all ui-icon-add">Add</a>
 				</div>
+				<ul id="grouplist" data-role="listview">
+				</ul>
 			</div>
 		</div>
 	</body>
