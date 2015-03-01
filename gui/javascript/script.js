@@ -1,5 +1,57 @@
 
 
+$(document).ready( function() {
+	DomLoaded();
+} );
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+var DomLoaded = function() {
+	var user = getParameterByName('user');
+	if (user) {
+		fillGroupList(user);
+	}
+}
+
+var fillGroupList = function(user) {
+	var dburl = 'http://localhost:8085/api/group/member/' + user;
+
+	$.ajax( {
+		type: 'GET',
+		url: dburl,
+		success: ajaxSuccessGetGroups
+	});
+}
+
+
+
+var ajaxSuccessGetGroups = function(groups) {
+	$('#grouplist').empty();
+	groups.forEach( function(group) {
+
+		var groupId = group._id.toString().trim();
+
+		var ele = $("<li/>")
+				.addClass("grouplink")
+				.attr("data-group", groupId)
+				.append('<a href="group.html?group=' + group._id + '"><h3>' + group.name + '</h3></a>');
+		ele.appendTo("#grouplist");
+	});
+	$("#grouplist").listview("refresh");
+
+
+
+	return false;
+}
+
+
+
+
 
 var _createnewgroup = function() {
 	var name = $("#groupname").val();
