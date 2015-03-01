@@ -1,0 +1,19 @@
+.blue {
+	background-color: blue;
+	padding: 5px;
+	color: white;
+}
+
+
+.red {
+	background-color: red;
+}
+.green {
+	background-color: #10ff10;
+	font-size: 50px;
+	color: orange;
+}
+.hello {
+	background-color: #394728;
+	color: #00ff00;
+}

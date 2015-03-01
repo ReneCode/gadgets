@@ -1,0 +1,44 @@
+<!doctype html>
+<html ng-app="partsApp">
+<head>
+  <meta charset="utf8" />
+  <title>AngularJS Tutorial</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+
+<div>
+<input type="text" ng-model="search" autofocus>
+<p>Du suchst gerade nach: {{search}}</p>
+
+<!-- will be shown, if search != "" -->
+<p ng-show="search">{{search.toUpperCase() + "!"}}  </p>
+</div>
+
+
+<table class="table" ng-controller="ArticlesCtrl">
+  <tr ng-repeat="article in articles | filter:search">
+    <td>{{article.id}}</td>
+    <td>{{article.name}}</td>
+    <td>{{article.price}}</td>
+  </tr>
+</table>
+<div ng-init="items = ['thomas', 'lea', 'paula', 'jasmin', 'dorothe']">
+<ul ng-repeat="it in items | filter:search">
+	<li>Item: {{it}}</li>
+ 
+</ul>
+</div>
+
+<table class="table" ng-controller="RiffCtrl">
+	<tr ng-repeat="riff in riffs">
+		<td>{{riff.author}}</td>
+		<td>{{riff.group}}</td>
+		<td>{{riff.length}}</td>
+	</tr>
+</table>
+
+	<script src="js/angular.min.js"></script>
+	<script src="parts.js"></script>
+</body>
+</html>
