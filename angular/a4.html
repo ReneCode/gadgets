@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html ng-app="dateApp">
+<head>
+	<meta charset="UTF-8">
+</head>
+<body ng-controller="DateCtrl">
+	Today's date:
+	{{now | date:'HH:mm:ss'}}
+	<br>
+	{{ now | date:'dd. MMMM yyyy' | truncate:10}}
+	<script src="javascript/angular.min.js"></script>
+	<script src="javascript/dateApp.js"></script>
+</body>
+</html>
