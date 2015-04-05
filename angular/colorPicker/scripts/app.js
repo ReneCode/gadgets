@@ -38,8 +38,28 @@ colorPickerApp.directive('colorPicker', function() {
 		*/
 		restrict: 'E',
 		link: function(scope, element, attrs) {
+			var COLORS = ['r', 'g', 'b', 'a'];
+			COLORS.forEach(function(value) {
+				scope.$watch(value, function(newValue, oldValue) {
+					if (newValue !== oldValue) {
+						if (angular.isFunction(scope.onChange)) {
+							scope.onChange(generateColorChangeObject());
+						}
+					}
+				});
+			});
+
+			var generateColorChangeObject = function() {
+				var obj = {};
+				COLORS.forEach(function(value) {
+					obj[value] = scope[value];
+				});
+				return obj;
+			}
+			/*
 			console.log("it's me, colorPicker!");
 			scope.onChange();
+			*/
 		}
 	};
 });
