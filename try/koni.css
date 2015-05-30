@@ -1,0 +1,44 @@
+
+
+h1 {
+	font-size: 40px;
+}
+
+div {
+	border-top: 1px black solid;
+}
+
+.arrow-collapse {
+	background-color: gray;
+}
+.arrow-expand {
+	background-color: blue;
+}
+
+.red {
+	background-color: red;
+}
+
+.insert1 {
+	padding-left: 10px;
+}
+
+.insert2 {
+	padding-left: 20px;
+}
+
+.colexp-line {
+	font-weight: bold;
+}
+
+.colexp-line:hover {
+	cursor: pointer;
+}
+
+.show {
+	display: block;
+}
+
+.hide {
+	display: none; 
+}
